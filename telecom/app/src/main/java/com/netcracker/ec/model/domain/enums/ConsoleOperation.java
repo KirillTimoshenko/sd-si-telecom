@@ -24,4 +24,9 @@ public enum ConsoleOperation {
     public static boolean contains(String id) {
         return Arrays.stream(ConsoleOperation.values()).anyMatch(op -> op.getId().equals(id));
     }
+
+    @Override
+    public String toString() {
+        return id + " - " + name;
+    }
 }
