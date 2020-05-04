@@ -15,7 +15,7 @@ public class ShowOrdersOperation implements Operation {
 
     @Override
     public void execute() {
-        System.out.println("Please Select Operation.");
+        console.printMessage("Please Select Operation.");
 
         Map<Integer, String> operationModifications = getOperationModificationsMap();
         console.printAvailableOperations(operationModifications);
@@ -43,7 +43,7 @@ public class ShowOrdersOperation implements Operation {
 
     private void showOrderOfASpecificObjectType() {
 //        Map<Integer, String> orderObjectTypeMap = ncObjectTypeService.getOrdersObjectTypeNameMap();
-//        console.printAvailableOperations(orderObjectTypeMap);
+//        console.printConsoleOperations(orderObjectTypeMap);
 //
 //        Integer objectTypeId = console.nextAvailableOperation(orderObjectTypeMap.keySet());
 //

@@ -5,19 +5,19 @@ import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
-import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.NcObjectTypeService;
 import com.netcracker.ec.services.db.impl.NcAttributeServiceImpl;
-import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 import com.netcracker.ec.services.db.impl.NcObjectTypeServiceImpl;
 import com.netcracker.ec.services.util.AttributeValueManager;
 
 import java.util.*;
 
+import static com.netcracker.ec.common.TelecomConstants.ATTR_SCHEMA_ID;
+import static com.netcracker.ec.common.TelecomConstants.ORDER_PARENT_OBJECT_TYPE_ID;
+
 public class CreateOrderOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
     private final NcAttributeService ncAttributeService;
-    private final NcObjectService ncObjectService;
     private final AttributeValueManager attributeValueManager;
 
     private final Console console = Console.getInstance();
@@ -25,13 +25,12 @@ public class CreateOrderOperation implements Operation {
     public CreateOrderOperation() {
         this.ncObjectTypeService = new NcObjectTypeServiceImpl();
         this.ncAttributeService = new NcAttributeServiceImpl();
-        this.ncObjectService = new NcObjectServiceImpl();
         this.attributeValueManager = new AttributeValueManager(console.getScanner());
 }
 
     @Override
     public void execute() {
-        System.out.println("Please Select Object Type.");
+        console.printMessage("Please Select Object Type.");
 
         Map<Integer, String> orderObjectTypeMap = getOrdersObjectTypeNameMap();
         console.printAvailableOperations(orderObjectTypeMap);
@@ -39,21 +38,16 @@ public class CreateOrderOperation implements Operation {
         Integer objectTypeId = console.nextAvailableOperation(orderObjectTypeMap.keySet());
 
         Set<NcAttribute> attributes = ncAttributeService
-                .getAttributesByObjectTypeAndAttrSchema(objectTypeId, 40);
+                .getAttributesByObjectTypeAndAttrSchema(objectTypeId, ATTR_SCHEMA_ID);
 
         Order order = new Order(ncObjectTypeService.getNcObjectTypeById(objectTypeId));
 
         attributeValueManager.readOrderAttributes(order, attributes);
 
         if (console.getSaveDialogueAnswer()) {
-            addOrder(order);
             addOrderParams(order);
             console.printOrderInfo(order);
         }
-    }
-
-    private void addOrder(Order order) {
-        //ncObjectService.insert(order);
     }
 
     private void addOrderParams(Order order) {
@@ -61,7 +55,7 @@ public class CreateOrderOperation implements Operation {
     }
 
     private Map<Integer, String> getOrdersObjectTypeNameMap() {
-        List<NcObjectType> objectTypesList = ncObjectTypeService.getObjectTypesByParentId(2);
+        List<NcObjectType> objectTypesList = ncObjectTypeService.getObjectTypesByParentId(ORDER_PARENT_OBJECT_TYPE_ID);
         Map<Integer, String> objectTypesMap = new HashMap<>();
         objectTypesList.forEach(objectType -> objectTypesMap
                 .put(objectType.getId(), objectType.getName()));

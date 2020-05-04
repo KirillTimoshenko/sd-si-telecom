@@ -1,6 +1,5 @@
 package com.netcracker.ec.services.console;
 
-import com.netcracker.ec.model.db.NcAttribute;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.model.domain.enums.ConsoleOperation;
 import com.netcracker.ec.provisioning.operations.CreateOrderOperation;
@@ -13,6 +12,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
+import static com.netcracker.ec.common.TelecomConstants.POSITIVE_ANSWER;
 
 public class Console {
     @Getter
@@ -32,8 +33,8 @@ public class Console {
 
     public Operation getNextOperation() {
         Operation operation = null;
-        printAvailableOperations();
-        String operationId = console.nextOperationCommand();
+        printConsoleOperations();
+        String operationId = console.nextConsoleOperationCommand();
 
         switch (ConsoleOperation.getOperationById(operationId)) {
             case CREATE_ORDER:
@@ -51,12 +52,7 @@ public class Console {
         return operation;
     }
 
-    public String getAttributeValue(NcAttribute attr) {
-        System.out.print(attr.getName() + ": ");
-        return scanner.next();
-    }
-
-    public void printAvailableOperations() {
+    public void printConsoleOperations() {
         System.out.println("  Operations:");
         Arrays.stream(ConsoleOperation.values()).forEach(System.out::println);
     }
@@ -79,6 +75,10 @@ public class Console {
         System.out.println(stringBuilder.toString());
     }
 
+    public void printMessage(String msg) {
+        System.out.println(msg);
+    }
+
     public String nextOperationCommand() {
         return scanner.next();
     }
@@ -95,9 +95,17 @@ public class Console {
         return id;
     }
 
+    public String nextConsoleOperationCommand() {
+        String command;
+        do {
+            command = console.nextOperationCommand();
+        } while (!ConsoleOperation.contains(command));
+        return command;
+    }
+
     public boolean getSaveDialogueAnswer() {
         System.out.println("Save order?[Y/N]");
-        return scanner.next().equals("Y");
+        return POSITIVE_ANSWER.equalsIgnoreCase(scanner.next());
     }
 
     public void close() {

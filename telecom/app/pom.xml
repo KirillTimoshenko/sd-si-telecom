@@ -12,4 +12,11 @@
     <artifactId>app</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>com.netcracker.ec</groupId>
+            <artifactId>om</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

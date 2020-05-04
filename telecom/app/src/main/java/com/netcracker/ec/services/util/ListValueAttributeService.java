@@ -20,7 +20,7 @@ public class ListValueAttributeService {
     }
 
     public String read(NcAttribute attr) {
-        System.out.println("Please, choose list value.");
+        console.printMessage("Please, choose list value.");
 
         Map<Integer, String> listValuesMap = getListValuesMap(attr);
         console.printAvailableOperations(listValuesMap);
