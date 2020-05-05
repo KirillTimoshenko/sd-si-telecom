@@ -45,15 +45,15 @@ public class NcAttributeServiceImpl implements NcAttributeService {
     @SneakyThrows
     private NcAttribute getNcAttributeByResultSet(ResultSet resultSet) {
         resultSet.next();
-        return createNcAttributeByResultSet(resultSet);
+        NcAttribute attribute = createNcAttributeByResultSet(resultSet);
+        resultSet.close();
+        return attribute;
     }
 
     private NcAttribute createNcAttributeByResultSet(ResultSet resultSet) throws SQLException {
-        NcAttribute ncAttribute = new NcAttribute(resultSet.getInt(1),
+        return new NcAttribute(resultSet.getInt(1),
                 resultSet.getString(2),
                 resultSet.getInt(3),
                 new NcAttrTypeDefServiceImpl().getNcAttrTypeDefById(resultSet.getInt(4)));
-        resultSet.close();
-        return ncAttribute;
     }
 }

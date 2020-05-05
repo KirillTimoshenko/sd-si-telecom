@@ -1,5 +1,7 @@
 package com.netcracker.ec.model.db;
 
+import com.netcracker.ec.services.db.impl.NcParamsServiceImpl;
+import com.netcracker.ec.services.db.impl.NcReferencesServiceImpl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +22,29 @@ public class NcObject extends NcEntity {
 
     public void setParam(NcAttribute attr, String object) {
         params.put(attr, object);
+    }
+
+    public void setReferenceId(Integer attrId, Integer refId) {
+        new NcReferencesServiceImpl().mergeReference(attrId, getId(), refId);
+    }
+
+    public void setListValueId(Integer attrId, Integer lvId) {
+        new NcParamsServiceImpl().mergeListValue(getId(), attrId, lvId);
+    }
+
+    public void setStringValue(Integer attrId, String string) {
+        new NcParamsServiceImpl().mergeValue(getId(), attrId, string);
+    }
+
+    public Integer getReferenceId(Integer attrId) {
+        return new NcReferencesServiceImpl().selectReference(getId(), attrId);
+    }
+
+    public Integer getListValueId(Integer attrId) {
+        return new NcParamsServiceImpl().selectListValueId(getId(), attrId);
+    }
+
+    public String getStringValue(Integer attrId) {
+        return new NcParamsServiceImpl().selectStringValue(getId(), attrId);
     }
 }

@@ -24,7 +24,9 @@ public class NcObjectTypeServiceImpl implements NcObjectTypeService {
         String query = Queries.getQuery("get_object_type_by_id");
         ResultSet resultSet = DB_WORKER.executeSelectQuery(query, otId);
         resultSet.next();
-        return createNcObjectTypeByResultSet(resultSet);
+        NcObjectType ncObjectType = createNcObjectTypeByResultSet(resultSet);
+        resultSet.close();
+        return ncObjectType;
     }
 
     @SneakyThrows
@@ -41,8 +43,6 @@ public class NcObjectTypeServiceImpl implements NcObjectTypeService {
     }
 
     private NcObjectType createNcObjectTypeByResultSet(ResultSet resultSet) throws SQLException {
-        NcObjectType ncObjectType = new NcObjectType(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3));
-        resultSet.close();
-        return ncObjectType;
+        return new NcObjectType(resultSet.getInt(1), resultSet.getString(2), resultSet.getInt(3));
     }
 }
