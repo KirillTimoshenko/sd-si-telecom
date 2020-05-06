@@ -1,6 +1,7 @@
 package com.netcracker.ec.services.util;
 
 import com.netcracker.ec.model.db.NcAttribute;
+import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.domain.order.Order;
 
 import java.util.Scanner;
@@ -23,14 +24,30 @@ public class AttributeValueManager {
         order.getParams().forEach((key, value) -> mergerAttribute(order, key, value));
     }
 
-    public String getAttributeValueFromOrder(Order order, NcAttribute attr) {
+    public void initOrderAttributes(NcObject object, Set<NcAttribute> attributes) {
+        attributes.forEach(attr -> object
+                .setParam(attr, getAttributeValueFromDB(object, attr)));
+    }
+
+    public String getAttributeValueFromOrder(NcObject object, NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
-                return order.getReferenceValue(attr.getId());
+                return object.getReferenceValue(attr.getId());
             case LIST:
-                return order.getListValue(attr.getId());
+                return object.getListValue(attr.getId());
             default:
-                return order.getStringValue(attr.getId());
+                return object.getStringValue(attr.getId());
+        }
+    }
+
+    private String getAttributeValueFromDB(NcObject object, NcAttribute attr) {
+        switch (attr.getAttrTypeDef().getType()) {
+            case REFERENCE:
+                return object.getReferenceId(attr.getId()).toString();
+            case LIST:
+                return object.getListValueId(attr.getId()).toString();
+            default:
+                return object.getStringValue(attr.getId());
         }
     }
 

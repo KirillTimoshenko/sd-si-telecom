@@ -1,6 +1,7 @@
 package com.netcracker.ec.services.console;
 
 import com.netcracker.ec.model.db.NcEntity;
+import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.model.domain.enums.ConsoleOperation;
 import com.netcracker.ec.provisioning.operations.CreateOrderOperation;
@@ -64,17 +65,17 @@ public class Console {
         entityList.forEach(entity -> System.out.println(entity.toFormattedOutput()));
     }
 
-    public void printOrderInfo(Order order) {
+    public void printOrderInfo(NcObject object) {
         AttributeValueManager attributeValueManager = new AttributeValueManager(scanner);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Order name: ")
-                .append(order.getName())
+                .append(object.getName())
                 .append("\n");
-        order.getParams().forEach((attr, value) ->
+        object.getParams().forEach((attr, value) ->
                 stringBuilder.append("  ")
                         .append(attr.getName())
                         .append(": ")
-                        .append(attributeValueManager.getAttributeValueFromOrder(order, attr))
+                        .append(attributeValueManager.getAttributeValueFromOrder(object, attr))
                         .append("\n"));
         System.out.println(stringBuilder.toString());
     }

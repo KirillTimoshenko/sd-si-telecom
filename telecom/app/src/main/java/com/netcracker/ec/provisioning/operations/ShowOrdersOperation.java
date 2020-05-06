@@ -1,12 +1,17 @@
 package com.netcracker.ec.provisioning.operations;
 
+import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
+import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.NcObjectTypeService;
 import com.netcracker.ec.services.db.impl.NcAttributeServiceImpl;
+import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 import com.netcracker.ec.services.db.impl.NcObjectTypeServiceImpl;
+import com.netcracker.ec.services.util.AttributeValueManager;
+import com.netcracker.ec.services.util.EntityIdManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,16 +19,21 @@ import java.util.List;
 import java.util.Map;
 
 import static com.netcracker.ec.common.TelecomConstants.ABSTRACT_ORDER_OBJECT_TYPE;
+import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 
 public class ShowOrdersOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
+    private final NcObjectService ncObjectService;
     private final NcAttributeService ncAttributeService;
+    private final AttributeValueManager attributeValueManager;
 
     private final Console console = Console.getInstance();
 
     public ShowOrdersOperation() {
         this.ncObjectTypeService = new NcObjectTypeServiceImpl();
+        this.ncObjectService = new NcObjectServiceImpl();
         this.ncAttributeService = new NcAttributeServiceImpl();
+        this.attributeValueManager = new AttributeValueManager(console.getScanner());
     }
 
     @Override
@@ -47,33 +57,41 @@ public class ShowOrdersOperation implements Operation {
     }
 
     private void showAllOrders() {
-//        List<Order> orders = ncObjectService.getOrders();
-//
-//        initOrdersParameters(orders);
-//
-//        printOrders(orders);
+        List<NcObject> objectsList = new ArrayList<>();
+
+        List<NcObjectType> objectTypesList = ncObjectTypeService
+                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
+
+        objectTypesList.forEach(objectType -> objectsList.addAll(ncObjectService
+                .getNcObjectsByObjectTypeId(objectType.getId())));
+
+        initOrdersParameters(objectsList);
+        printOrders(objectsList);
     }
 
     private void showOrderOfASpecificObjectType() {
-//        Map<Integer, String> orderObjectTypeMap = ncObjectTypeService.getOrdersObjectTypeNameMap();
-//        console.printConsoleOperations(orderObjectTypeMap);
-//
-//        Integer objectTypeId = console.nextAvailableOperation(orderObjectTypeMap.keySet());
-//
-//        List<Order> orders = ncObjectService.getOrdersByObjectTypeId(objectTypeId);
-//
-//        initOrdersParameters(orders);
-//
-//        printOrders(orders);
+        List<NcObjectType> objectTypesList = ncObjectTypeService
+                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
+        console.printEntityList(objectTypesList);
+
+        Integer objectTypeId = console.nextAvailableOperation(
+                EntityIdManager.getIdSet(objectTypesList));
+
+        List<NcObject> objectsList = ncObjectService.getNcObjectsByObjectTypeId(objectTypeId);
+
+        initOrdersParameters(objectsList);
+        printOrders(objectsList);
     }
 
-    private void initOrdersParameters(List<Order> orders) {
-//        orders.forEach(order -> order.setParameters(
-//                ncParamsService.getParamsByObjectId(order.getId())));
+    private void initOrdersParameters(List<NcObject> objects) {
+        objects.forEach(object -> attributeValueManager
+                .initOrderAttributes(object, ncAttributeService
+                        .getAttributesByObjectTypeAndAttrSchema(object.getObjectType().getId(),
+                                TELECOM_OM_SCHEMA_ID)));
     }
 
-    private void printOrders(List<Order> orders) {
-        //orders.forEach(order -> console.printOrderInfo(order));
+    private void printOrders(List<NcObject> objects) {
+        objects.forEach(console::printOrderInfo);
     }
 
     private Map<Integer, String> getOperationModificationsMap() {

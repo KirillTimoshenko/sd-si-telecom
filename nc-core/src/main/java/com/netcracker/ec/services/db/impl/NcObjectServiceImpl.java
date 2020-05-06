@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObjectService {
@@ -32,8 +33,14 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     }
 
     @Override
-    public List<NcEntity> getNcObjectsAsEntitiesByObjectType(NcObjectType objectType) {
+    public List<NcObject> getNcObjectsByObjectTypeId(Integer objectTypeId) {
         String query = Queries.getQuery("get_objects_by_ot");
+        return getNcObjectsByResultSet(DB_WORKER.executeSelectQuery(query, objectTypeId));
+    }
+
+    @Override
+    public List<NcEntity> getNcObjectsAsEntitiesByObjectType(NcObjectType objectType) {
+        String query = Queries.getQuery("get_objects_as_entities_by_ot");
         return getNcEntitiesByResultSet(DB_WORKER.executeSelectQuery(query, objectType.getId()));
     }
 
@@ -49,6 +56,16 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
         NcObject object = createNcObjectByResultSet(resultSet);
         resultSet.close();
         return object;
+    }
+
+    @SneakyThrows
+    private List<NcObject> getNcObjectsByResultSet(ResultSet resultSet) {
+        List<NcObject> objectsList = new ArrayList<>();
+        while (resultSet.next()) {
+            objectsList.add(createNcObjectByResultSet(resultSet));
+        }
+        resultSet.close();
+        return  objectsList;
     }
 
     private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
