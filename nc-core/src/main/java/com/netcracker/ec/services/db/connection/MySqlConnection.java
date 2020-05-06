@@ -7,10 +7,14 @@ public class MySqlConnection {
     private String url;
 
     public MySqlConnection() {
-        this.url = "jdbc:mysql://127.0.0.1:3333/opf";
+        this.url = "jdbc:mysql://localhost/opf?" +
+                "useUnicode=true&" +
+                "serverTimezone=UTC&" +
+                "useSSL=true&" +
+                "verifyServerCertificate=false";
     }
 
     public Connection getConnection() throws Exception {
-        return DriverManager.getConnection(url, "opf", "opf");
+        return DriverManager.getConnection(url, "root", "8888");
     }
 }

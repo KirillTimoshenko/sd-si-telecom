@@ -7,6 +7,8 @@ import com.netcracker.ec.model.db.NcObjectType;
 import java.util.List;
 
 public interface NcObjectService extends NcEntityService {
+    NcObject getNcObjectById(Integer objectId);
+
     List<Integer> getObjectIdsByByObjectTypeId(Integer otId);
 
     List<NcEntity> getNcObjectsAsEntitiesByObjectType(NcObjectType objectType);
