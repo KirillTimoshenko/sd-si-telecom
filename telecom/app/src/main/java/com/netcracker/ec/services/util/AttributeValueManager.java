@@ -23,6 +23,17 @@ public class AttributeValueManager {
         order.getParams().forEach((key, value) -> mergerAttribute(order, key, value));
     }
 
+    public String getOrderAttributeValue(Order order, NcAttribute attr) {
+        switch (attr.getAttrTypeDef().getType()) {
+            case REFERENCE:
+                return order.getReferenceValue(attr.getId());
+            case LIST:
+                return order.getListValue(attr.getId());
+            default:
+                return order.getStringValue(attr.getId());
+        }
+    }
+
     private String readAttribute(NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case TEXT:
@@ -47,10 +58,13 @@ public class AttributeValueManager {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
                 order.setReferenceId(attr.getId(), Integer.parseInt(value));
+                break;
             case LIST:
                 order.setListValueId(attr.getId(), Integer.parseInt(value));
+                break;
             default:
                 order.setStringValue(attr.getId(), value);
+                break;
         }
     }
 

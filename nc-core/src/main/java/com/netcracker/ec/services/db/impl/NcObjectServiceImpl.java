@@ -6,7 +6,10 @@ import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.services.db.DbWorker;
 import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.Queries;
+import lombok.SneakyThrows;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObjectService {
@@ -14,6 +17,12 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
 
     public NcObjectServiceImpl() {
 
+    }
+
+    @Override
+    public NcObject getNcObjectById(Integer objectId) {
+        String query = Queries.getQuery("get_object_by_id");
+        return getNcObjectByResultSet(DB_WORKER.executeSelectQuery(query, objectId));
     }
 
     @Override
@@ -32,5 +41,20 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     public void insert(NcObject object) {
         String query = Queries.getQuery("insert_object");
         DB_WORKER.executeQuery(query, object.getId(), object.getName(), object.getObjectType().getId(), object.getDescription());
+    }
+
+    @SneakyThrows
+    private NcObject getNcObjectByResultSet(ResultSet resultSet) {
+        resultSet.next();
+        NcObject object = createNcObjectByResultSet(resultSet);
+        resultSet.close();
+        return object;
+    }
+
+    private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
+        return new NcObject(resultSet.getInt(1),
+                resultSet.getString(2),
+                new NcObjectTypeServiceImpl().getNcObjectTypeById(resultSet.getInt(3)),
+                resultSet.getString(4));
     }
 }

@@ -7,6 +7,7 @@ import com.netcracker.ec.provisioning.operations.CreateOrderOperation;
 import com.netcracker.ec.provisioning.operations.ExitOperation;
 import com.netcracker.ec.provisioning.operations.Operation;
 import com.netcracker.ec.provisioning.operations.ShowOrdersOperation;
+import com.netcracker.ec.services.util.AttributeValueManager;
 import lombok.Getter;
 
 import java.util.*;
@@ -64,15 +65,16 @@ public class Console {
     }
 
     public void printOrderInfo(Order order) {
+        AttributeValueManager attributeValueManager = new AttributeValueManager(scanner);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Order name: ")
                 .append(order.getName())
                 .append("\n");
-        order.getParams().forEach((key, value) ->
+        order.getParams().forEach((attr, value) ->
                 stringBuilder.append("  ")
-                        .append(key.getName())
+                        .append(attr.getName())
                         .append(": ")
-                        .append(value)
+                        .append(attributeValueManager.getOrderAttributeValue(order, attr))
                         .append("\n"));
         System.out.println(stringBuilder.toString());
     }

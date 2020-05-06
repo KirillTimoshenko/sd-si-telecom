@@ -1,6 +1,7 @@
 package com.netcracker.ec.services.db.impl;
 
 import com.netcracker.ec.model.db.NcEntity;
+import com.netcracker.ec.model.db.NcListValue;
 import com.netcracker.ec.services.db.DbWorker;
 import com.netcracker.ec.services.db.NcListValueService;
 import com.netcracker.ec.services.db.Queries;
@@ -12,6 +13,12 @@ public class NcListValueServiceImpl extends NcEntityServiceImpl implements NcLis
 
     public NcListValueServiceImpl() {
 
+    }
+
+    @Override
+    public String getNcListValueNameById(Integer listValueId) {
+        String query = Queries.getQuery("get_list_value_name_by_id");
+        return DB_WORKER.getStringValueByQuery(query, listValueId);
     }
 
     @Override

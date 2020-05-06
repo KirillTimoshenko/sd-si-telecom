@@ -1,5 +1,7 @@
 package com.netcracker.ec.model.db;
 
+import com.netcracker.ec.services.db.impl.NcListValueServiceImpl;
+import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 import com.netcracker.ec.services.db.impl.NcParamsServiceImpl;
 import com.netcracker.ec.services.db.impl.NcReferencesServiceImpl;
 import lombok.Getter;
@@ -18,6 +20,12 @@ public class NcObject extends NcEntity {
     public NcObject(NcObjectType objectType) {
         super();
         this.objectType = objectType;
+    }
+
+    public NcObject(Integer id, String name, NcObjectType objectType, String description) {
+        super(id, name);
+        this.objectType = objectType;
+        this.description = description;
     }
 
     public void setParam(NcAttribute attr, String object) {
@@ -46,5 +54,13 @@ public class NcObject extends NcEntity {
 
     public String getStringValue(Integer attrId) {
         return new NcParamsServiceImpl().selectStringValue(getId(), attrId);
+    }
+
+    public String getReferenceValue(Integer attrId) {
+        return new NcObjectServiceImpl().getNcObjectById(getReferenceId(attrId)).getName();
+    }
+
+    public String getListValue(Integer attrId) {
+        return new NcListValueServiceImpl().getNcListValueNameById(getListValueId(attrId));
     }
 }
