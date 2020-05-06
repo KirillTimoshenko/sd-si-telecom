@@ -23,7 +23,7 @@ public class AttributeValueManager {
         order.getParams().forEach((key, value) -> mergerAttribute(order, key, value));
     }
 
-    public String getOrderAttributeValue(Order order, NcAttribute attr) {
+    public String getAttributeValueFromOrder(Order order, NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
                 return order.getReferenceValue(attr.getId());

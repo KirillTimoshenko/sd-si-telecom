@@ -74,7 +74,7 @@ public class Console {
                 stringBuilder.append("  ")
                         .append(attr.getName())
                         .append(": ")
-                        .append(attributeValueManager.getOrderAttributeValue(order, attr))
+                        .append(attributeValueManager.getAttributeValueFromOrder(order, attr))
                         .append("\n"));
         System.out.println(stringBuilder.toString());
     }

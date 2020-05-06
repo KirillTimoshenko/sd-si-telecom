@@ -13,7 +13,7 @@ import com.netcracker.ec.services.util.EntityIdManager;
 
 import java.util.*;
 
-import static com.netcracker.ec.common.TelecomConstants.ATTR_SCHEMA_ID;
+import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 import static com.netcracker.ec.common.TelecomConstants.ABSTRACT_ORDER_OBJECT_TYPE;
 
 public class CreateOrderOperation implements Operation {
@@ -40,7 +40,7 @@ public class CreateOrderOperation implements Operation {
         Integer objectTypeId = console.nextAvailableOperation(EntityIdManager.getIdSet(objectTypesList));
 
         Set<NcAttribute> attributes = ncAttributeService
-                .getAttributesByObjectTypeAndAttrSchema(objectTypeId, ATTR_SCHEMA_ID);
+                .getAttributesByObjectTypeAndAttrSchema(objectTypeId, TELECOM_OM_SCHEMA_ID);
 
         Order order = new Order(ncObjectTypeService.getNcObjectTypeById(objectTypeId));
 
