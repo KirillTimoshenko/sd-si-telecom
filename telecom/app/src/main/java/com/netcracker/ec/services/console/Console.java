@@ -1,5 +1,6 @@
 package com.netcracker.ec.services.console;
 
+import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.model.domain.enums.ConsoleOperation;
 import com.netcracker.ec.provisioning.operations.CreateOrderOperation;
@@ -8,10 +9,7 @@ import com.netcracker.ec.provisioning.operations.Operation;
 import com.netcracker.ec.provisioning.operations.ShowOrdersOperation;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import static com.netcracker.ec.common.TelecomConstants.POSITIVE_ANSWER;
 
@@ -59,6 +57,10 @@ public class Console {
 
     public void printAvailableOperations(Map<Integer, String> operationsMap) {
         operationsMap.forEach((key, value) -> System.out.println(key + " - " + value));
+    }
+
+    public void printEntityList(List<? extends NcEntity> entityList) {
+        entityList.forEach(entity -> System.out.println(entity.toFormattedOutput()));
     }
 
     public void printOrderInfo(Order order) {

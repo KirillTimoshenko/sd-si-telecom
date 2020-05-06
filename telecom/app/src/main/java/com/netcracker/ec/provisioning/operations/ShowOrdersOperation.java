@@ -1,16 +1,29 @@
 package com.netcracker.ec.provisioning.operations;
 
+import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
+import com.netcracker.ec.services.db.NcAttributeService;
+import com.netcracker.ec.services.db.NcObjectTypeService;
+import com.netcracker.ec.services.db.impl.NcAttributeServiceImpl;
+import com.netcracker.ec.services.db.impl.NcObjectTypeServiceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.netcracker.ec.common.TelecomConstants.ABSTRACT_ORDER_OBJECT_TYPE;
+
 public class ShowOrdersOperation implements Operation {
+    private final NcObjectTypeService ncObjectTypeService;
+    private final NcAttributeService ncAttributeService;
+
     private final Console console = Console.getInstance();
 
     public ShowOrdersOperation() {
+        this.ncObjectTypeService = new NcObjectTypeServiceImpl();
+        this.ncAttributeService = new NcAttributeServiceImpl();
     }
 
     @Override

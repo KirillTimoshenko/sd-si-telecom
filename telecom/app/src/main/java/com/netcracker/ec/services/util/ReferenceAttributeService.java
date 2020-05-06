@@ -6,9 +6,7 @@ import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ReferenceAttributeService {
     private final NcObjectService ncObjectService;
@@ -22,20 +20,12 @@ public class ReferenceAttributeService {
     public String read(NcAttribute attr) {
         console.printMessage("Please, enter reference.");
 
-        Map<Integer, String> objectsMap = getObjectsMap(attr);
-        console.printAvailableOperations(objectsMap);
+        List<NcEntity> objectsList = ncObjectService.getNcObjectsAsEntitiesByObjectType(
+                attr.getAttrTypeDef().getObjectType());
+        console.printEntityList(objectsList);
 
-        Integer objectId = console.nextAvailableOperation(objectsMap.keySet());
+        Integer objectId = console.nextAvailableOperation(EntityIdManager.getIdSet(objectsList));
 
         return objectId.toString();
-    }
-
-    private Map<Integer, String> getObjectsMap(NcAttribute attr) {
-        List<NcEntity> list = ncObjectService.getNcObjectsAsEntitiesByObjectType(
-                attr.getAttrTypeDef().getObjectType());
-
-        Map<Integer, String> objectsMap = new HashMap<>();
-        list.forEach(obj -> objectsMap.put(obj.getId(), obj.getName()));
-        return objectsMap;
     }
 }

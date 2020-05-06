@@ -7,5 +7,5 @@ public final class TelecomConstants {
     public static final String POSITIVE_ANSWER = "Y";
 
     public static final Integer ATTR_SCHEMA_ID = 40;
-    public static final Integer ORDER_PARENT_OBJECT_TYPE_ID = 2;
+    public static final Integer ABSTRACT_ORDER_OBJECT_TYPE = 2;
 }
