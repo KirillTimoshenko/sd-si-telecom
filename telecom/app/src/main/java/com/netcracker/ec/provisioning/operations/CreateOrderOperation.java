@@ -55,13 +55,4 @@ public class CreateOrderOperation implements Operation {
     private void addOrderParams(Order order) {
         attributeValueManager.mergerOrderAttributes(order);
     }
-
-    private Map<Integer, String> getOrdersObjectTypeNameMap() {
-        List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
-        Map<Integer, String> objectTypesMap = new HashMap<>();
-        objectTypesList.forEach(objectType -> objectTypesMap
-                .put(objectType.getId(), objectType.getName()));
-        return objectTypesMap;
-    }
 }
