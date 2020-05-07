@@ -64,118 +64,117 @@ create table nc_params(
     foreign key (list_value_id) references nc_list_values(list_value_id),
     unique key (object_id, attr_id));
 
-insert into nc_object_types
-values(1, 'All', 0, 'Based Object Type');
-insert into nc_object_types
-values(2, 'Abstract Order Object Type', 1, 'Abstract object type for all porduct orders');
-insert into nc_object_types
-values(3, 'Abstract Instance Object Types', 1, 'Abstract object type for all porduct instances');
-insert into nc_object_types
-values(4, 'Internet Order Object Type', 2, null);
-insert into nc_object_types
-values(5, 'Video Order Object Type', 2, null);
-insert into nc_object_types
-values(6, 'Mobile Order Object Type', 2, null);
-insert into nc_object_types
-values(7, 'Internet Instance Object Types', 3, null);
-insert into nc_object_types
-values(8, 'Video Instance Object Types', 3, null);
-insert into nc_object_types
-values(9, 'Mobile Instance Object Type', 3, null);
-insert into nc_object_types
-values(10, 'Phone number', 1, null);
+/*
+insert into nc_attr_type_defs values(object_type_id, name, parent_id, description);
+*/
+insert into nc_object_types values(1, 'All', 0, 'Based Object Type');
+insert into nc_object_types values(10, 'Abstract Order Object Type', 1, 'Abstract Object Type for all Orders');
+insert into nc_object_types values(11, 'New Order Object Type', 10, null);
+insert into nc_object_types values(12, 'Modify Order Object Type', 10, null);
+insert into nc_object_types values(13, 'Disconnect Order Object Type', 10, 'Abstract Object Type for all Orders');
+insert into nc_object_types values(20, 'New Internet Order Object Type', 11, null);
+insert into nc_object_types values(21, 'Modify Internet Order Object Type', 12, null);
+insert into nc_object_types values(22, 'Disconnect Internet Order Object Type', 13, null);
+insert into nc_object_types values(23, 'New Video Order Object Type', 11, null);
+insert into nc_object_types values(24, 'Modify Video Order Object Type', 12, null);
+insert into nc_object_types values(25, 'Disconnect Video Order Object Type', 13, null);
+insert into nc_object_types values(26, 'New Mobile Order Object Type', 11, null);
+insert into nc_object_types values(27, 'Modify Mobile Order Object Type', 12, null);
+insert into nc_object_types values(28, 'Disconnect Mobile Order Object Type', 13, null);
+insert into nc_object_types values(50, 'Abstract Instance Object Types', 1, 'Abstract Object Type for all Instances');
+insert into nc_object_types values(51, 'Internet Instance Object Types', 50, null);
+insert into nc_object_types values(52, 'Video Instance Object Types', 50, null);
+insert into nc_object_types values(53, 'Mobile Instance Object Type', 50, null);
+insert into nc_object_types values(80, 'Phone Number', 1, 'Phone Number Object Type');
 
-insert into nc_attr_type_defs
-values(20, 0, null, 'For any Text attribute');
-insert into nc_attr_type_defs
-values(21, 2, null, 'For any Number attribute');
-insert into nc_attr_type_defs
-values(22, 3, null, 'For any Decimal attribute');
-insert into nc_attr_type_defs
-values(23, 4, null, 'For any Date attribute');
-insert into nc_attr_type_defs
-values(24, 6, null, 'Access Type Values');
-insert into nc_attr_type_defs
-values(25, 6, null, 'Service Type Values');
-insert into nc_attr_type_defs
-values(26, 6, null, 'Order Status Values');
-insert into nc_attr_type_defs
-values(27, 9, 10, 'For any Reference to Phone Number OT');
+/*
+insert into nc_attr_type_defs values(attr_type_def_id, type, object_type_id, description);
+*/
+insert into nc_attr_type_defs values(300, 0, null, 'For any Text attribute');
+insert into nc_attr_type_defs values(301, 2, null, 'For any Number attribute');
+insert into nc_attr_type_defs values(302, 3, null, 'For any Decimal attribute');
+insert into nc_attr_type_defs values(303, 4, null, 'For any Date attribute');
+insert into nc_attr_type_defs values(304, 6, null, 'Access Type Values');
+insert into nc_attr_type_defs values(305, 6, null, 'Service Type Values');
+insert into nc_attr_type_defs values(306, 6, null, 'Order Status Values');
+insert into nc_attr_type_defs values(307, 6, null, 'Order Aim Values');
+insert into nc_attr_type_defs values(308, 9, 80, 'For any Reference to Phone Number OT');
+insert into nc_attr_type_defs values(309, 6, null, 'Provider Values');
+insert into nc_attr_type_defs values(310, 9, 10, 'For any Reference to Order OT');
 
-insert into  nc_list_values
-values(28, 'XDSL', 24);
-insert into  nc_list_values
-values(29, 'GPON', 24);
-insert into  nc_list_values
-values(30, 'Postpaid', 25);
-insert into  nc_list_values
-values(31, 'Prepaid', 25);
-insert into  nc_list_values
-values(32, 'NA', 26);
-insert into  nc_list_values
-values(33, 'Entering', 26);
-insert into  nc_list_values
-values(34, 'Ready for processing', 26);
-insert into  nc_list_values
-values(35, 'Processing', 26);
-insert into  nc_list_values
-values(36, 'Completed', 26);
-insert into  nc_list_values
-values(37, 'Cancelled', 26);
+/*
+insert into nc_list_values values(list_value_id, value, attr_type_def_id);
+*/
+insert into  nc_list_values values(401, 'XDSL', 304);
+insert into  nc_list_values values(402, 'GPON', 304);
+insert into  nc_list_values values(403, 'Postpaid', 305);
+insert into  nc_list_values values(404, 'Prepaid', 305);
+insert into  nc_list_values values(405, 'NA', 306);
+insert into  nc_list_values values(406, 'Entering', 306);
+insert into  nc_list_values values(407, 'Ready for processing', 306);
+insert into  nc_list_values values(408, 'Processing', 306);
+insert into  nc_list_values values(409, 'Completed', 306);
+insert into  nc_list_values values(410, 'Cancelled', 306);
+insert into  nc_list_values values(411, 'Superseded', 306);
+insert into  nc_list_values values(412, 'New', 307);
+insert into  nc_list_values values(413, 'Modify', 307);
+insert into  nc_list_values values(414, 'Disconnect', 307);
+insert into  nc_list_values values(415, 'HBO', 309);
+insert into  nc_list_values values(416, 'Netflix', 309);
 
-insert into nc_attr_schemes
-values(38, 'Designer Schema');
-insert into nc_attr_schemes
-values(39, 'Order Management Schema');
-insert into nc_attr_schemes
-values(40, 'Telecom OM Schema');
+/*
+insert into nc_attr_schemes values(attr_schema_id, name);
+*/
+insert into nc_attr_schemes values(500, 'Designer Schema');
+insert into nc_attr_schemes values(501, 'Order Management Schema');
+insert into nc_attr_schemes values(502, 'Telecom OM Schema');
 
-insert into nc_attributes
-values(11, 'Due Date', 40, 23);
-insert into nc_attributes
-values(12, 'Phone Number', 40, 27);
-insert into nc_attributes
-values(13, 'Access Type', 40, 24);
-insert into nc_attributes
-values(14, 'Download Speed', 40, 20);
-insert into nc_attributes
-values(15, 'Service Type', 40, 25);
-insert into nc_attributes
-values(16, 'Suspend Reason', 40, 20);
-insert into nc_attributes
-values(17, 'Activation Period', 40, 21);
-insert into nc_attributes
-values(18, 'Product Price', 40, 22);
-insert into nc_attributes
-values(19, 'Order Status', 39, 26);
-insert into nc_attributes
-values(41, 'Created When', 38, 23);
-insert into nc_attributes
-values(42, 'Order completion date', 39, 23);
+/*
+insert into nc_attributes values(attr_id, name, attr_schema_id, attr_type_def_id);
+*/
+insert into nc_attributes values(601, 'Due Date', 502, 303);
+insert into nc_attributes values(602, 'Phone Number', 502, 308);
+insert into nc_attributes values(603, 'Access Type', 502, 304);
+insert into nc_attributes values(604, 'Download Speed', 502, 300);
+insert into nc_attributes values(605, 'Service Type', 502, 305);
+insert into nc_attributes values(606, 'Disconnect Reason', 502, 300);
+insert into nc_attributes values(607, 'Activation Period', 502, 301);
+insert into nc_attributes values(608, 'Product Price', 502, 302);
+insert into nc_attributes values(609, 'Order Status', 501, 306);
+insert into nc_attributes values(610, 'Order Aim', 501, 307);
+insert into nc_attributes values(611, 'Created When', 500, 303);
+insert into nc_attributes values(612, 'Order Completion Date', 501, 303);
+insert into nc_attributes values(613, 'Provider', 502, 309);
+insert into nc_attributes values(614, 'Previous Order', 501, 310);
 
-insert into nc_attr_object_types
-values(11, 2);
-insert into nc_attr_object_types
-values(12, 6);
-insert into nc_attr_object_types
-values(13, 4);
-insert into nc_attr_object_types
-values(14, 4);
-insert into nc_attr_object_types
-values(15, 6);
-insert into nc_attr_object_types
-values(16, 5);
-insert into nc_attr_object_types
-values(17, 2);
-insert into nc_attr_object_types
-values(18, 2);
-insert into nc_attr_object_types
-values(19, 2);
-insert into nc_attr_object_types
-values(41, 1);
+/*
+insert into nc_attr_object_types values(attr_id, object_type_id);
+*/
+insert into nc_attr_object_types values(601, 11);
+insert into nc_attr_object_types values(601, 12);
+insert into nc_attr_object_types values(602, 26);
+insert into nc_attr_object_types values(602, 27);
+insert into nc_attr_object_types values(603, 20);
+insert into nc_attr_object_types values(603, 21);
+insert into nc_attr_object_types values(604, 20);
+insert into nc_attr_object_types values(604, 21);
+insert into nc_attr_object_types values(605, 26);
+insert into nc_attr_object_types values(605, 27);
+insert into nc_attr_object_types values(606, 13);
+insert into nc_attr_object_types values(607, 11);
+insert into nc_attr_object_types values(607, 12);
+insert into nc_attr_object_types values(608, 11);
+insert into nc_attr_object_types values(608, 12);
+insert into nc_attr_object_types values(609, 10);
+insert into nc_attr_object_types values(610, 10);
+insert into nc_attr_object_types values(611, 1);
+insert into nc_attr_object_types values(612, 10);
+insert into nc_attr_object_types values(613, 23);
+insert into nc_attr_object_types values(613, 24);
+insert into nc_attr_object_types values(614, 13);
 
 create table nc_id (id int(8));
-insert into nc_id set id = 42;
+insert into nc_id set id = 1000;
 
 delimiter $$
 create function generateId ()

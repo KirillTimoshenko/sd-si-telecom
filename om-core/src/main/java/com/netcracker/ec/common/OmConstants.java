@@ -1,17 +1,14 @@
 package com.netcracker.ec.common;
 
-public final class OmConstants {
-    private OmConstants() {
-    }
+public interface OmConstants {
+    String STR_EMPTY = "";
+    String STR_SPACE = " ";
+    String STR_OBJECT_TYPE = "Object Type";
+    String STR_TYPE = "Type";
+    String STR_HASH = "#";
 
-    public static final String STR_EMPTY = "";
-    public static final String STR_SPACE = " ";
-    public static final String STR_OBJECT_TYPE = "Object Type";
-    public static final String STR_TYPE = "Type";
-    public static final String STR_HASH = "#";
-
-    public static final Integer ATTR_ORDER_STATUS = 19;
-    public static final Integer ATTR_ORDER_COMPLETION_DATE = 42;
-
-    public static final Integer OT_ABSTRACT_ORDER = 2;
+    Integer ATTR_ORDER_STATUS = 609;
+    Integer ATTR_ORDER_AIM = 610;
+    Integer ATTR_ORDER_COMPLETION_DATE = 612;
+    Integer ATTR_PREVIOUS_ORDER = 614;
 }
