@@ -2,7 +2,6 @@ package com.netcracker.ec.provisioning.operations;
 
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
-import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
 import com.netcracker.ec.services.db.NcObjectService;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.netcracker.ec.common.TelecomConstants.ABSTRACT_ORDER_OBJECT_TYPE;
+import static com.netcracker.ec.common.TelecomConstants.NEW_ORDER_OBJECT_TYPE;
 import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 
 public class ShowOrdersOperation implements Operation {
@@ -60,7 +59,7 @@ public class ShowOrdersOperation implements Operation {
         List<NcObject> objectsList = new ArrayList<>();
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentId(NEW_ORDER_OBJECT_TYPE);
 
         objectTypesList.forEach(objectType -> objectsList.addAll(ncObjectService
                 .getNcObjectsByObjectTypeId(objectType.getId())));
@@ -71,7 +70,7 @@ public class ShowOrdersOperation implements Operation {
 
     private void showOrderOfASpecificObjectType() {
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentId(NEW_ORDER_OBJECT_TYPE);
         console.printEntityList(objectTypesList);
 
         Integer objectTypeId = console.nextAvailableOperation(

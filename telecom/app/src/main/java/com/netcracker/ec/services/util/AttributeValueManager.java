@@ -43,9 +43,11 @@ public class AttributeValueManager {
     private String getAttributeValueFromDB(NcObject object, NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
-                return object.getReferenceId(attr.getId()).toString();
+                Integer refValue = object.getReferenceId(attr.getId());
+                return refValue != null ? refValue.toString() : null;
             case LIST:
-                return object.getListValueId(attr.getId()).toString();
+                Integer listValue = object.getListValueId(attr.getId());
+                return listValue != null ? listValue.toString() : null;
             default:
                 return object.getStringValue(attr.getId());
         }
