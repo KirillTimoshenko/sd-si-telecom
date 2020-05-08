@@ -8,7 +8,9 @@ import com.netcracker.ec.model.domain.enums.OrderStatus;
 import com.netcracker.ec.services.OpfUtils;
 import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 import com.netcracker.ec.services.lc.LifeCycleManager;
+import com.netcracker.ec.services.omresolver.annotations.ObjectType;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import static com.netcracker.ec.common.OmConstants.*;
@@ -16,8 +18,10 @@ import static com.netcracker.ec.services.OpfUtils.getCurrentDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@ObjectType(objectTypeId = Order.OBJECT_TYPE)
 public class Order extends NcObject {
-    public static final Integer OBJECT_TYPE = 10;
+    public static final int OBJECT_TYPE = 10;
 
     public Order(NcObjectType objectType, OrderAim orderAim) {
         super(objectType);

@@ -60,7 +60,9 @@ public class DbWorker {
     @SneakyThrows
     public Integer getIdByQuery(String query, Object... params) {
         ResultSet resultSet = executeSelectQuery(query, params);
-        resultSet.next();
+        if (!resultSet.next()) {
+            return null;
+        }
         int id = resultSet.getInt(1);
         resultSet.close();
         return id;
@@ -80,7 +82,9 @@ public class DbWorker {
     @SneakyThrows
     public String getStringValueByQuery(String query, Object... params) {
         ResultSet resultSet = executeSelectQuery(query, params);
-        resultSet.next();
+        if (!resultSet.next()) {
+            return null;
+        }
         String stringValue = resultSet.getString(1);
         resultSet.close();
         return stringValue;
