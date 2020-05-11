@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.netcracker.ec.common.TelecomConstants.NEW_ORDER_OBJECT_TYPE;
-import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
+import static com.netcracker.ec.common.OmConstants.*;
 
 public class ShowOrdersOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -59,12 +58,13 @@ public class ShowOrdersOperation implements Operation {
         List<NcObject> objectsList = new ArrayList<>();
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(NEW_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentIds(NEW_ORDER_OBJECT_TYPE,
+                        MODIFY_ORDER_OBJECT_TYPE,
+                        DISCONNECT_ORDER_OBJECT_TYPE);
 
         objectTypesList.forEach(objectType -> objectsList.addAll(ncObjectService
                 .getNcObjectsByObjectTypeId(objectType.getId())));
 
-        initOrdersParameters(objectsList);
         printOrders(objectsList);
     }
 
@@ -78,15 +78,7 @@ public class ShowOrdersOperation implements Operation {
 
         List<NcObject> objectsList = ncObjectService.getNcObjectsByObjectTypeId(objectTypeId);
 
-        initOrdersParameters(objectsList);
         printOrders(objectsList);
-    }
-
-    private void initOrdersParameters(List<NcObject> objects) {
-        objects.forEach(object -> attributeValueManager
-                .initOrderAttributes(object, ncAttributeService
-                        .getAttributesByObjectTypeAndAttrSchema(object.getObjectType().getId(),
-                                TELECOM_OM_SCHEMA_ID)));
     }
 
     private void printOrders(List<NcObject> objects) {

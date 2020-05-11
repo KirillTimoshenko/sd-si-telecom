@@ -20,34 +20,12 @@ public class AttributeValueManager {
                 .setParam(attr, readAttribute(attr)));
     }
 
-    public void mergerOrderAttributes(Order order) {
-        order.getParams().forEach((key, value) -> mergerAttribute(order, key, value));
-    }
-
-    public void initOrderAttributes(NcObject object, Set<NcAttribute> attributes) {
-        attributes.forEach(attr -> object
-                .setParam(attr, getAttributeValueFromDB(object, attr)));
-    }
-
     public String getAttributeValueFromOrder(NcObject object, NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
                 return object.getReferenceValue(attr.getId());
             case LIST:
                 return object.getListValue(attr.getId());
-            default:
-                return object.getStringValue(attr.getId());
-        }
-    }
-
-    private String getAttributeValueFromDB(NcObject object, NcAttribute attr) {
-        switch (attr.getAttrTypeDef().getType()) {
-            case REFERENCE:
-                Integer refValue = object.getReferenceId(attr.getId());
-                return refValue != null ? refValue.toString() : null;
-            case LIST:
-                Integer listValue = object.getListValueId(attr.getId());
-                return listValue != null ? listValue.toString() : null;
             default:
                 return object.getStringValue(attr.getId());
         }
@@ -71,20 +49,6 @@ public class AttributeValueManager {
                 break;
         }
         return null;
-    }
-
-    private void mergerAttribute(Order order, NcAttribute attr, String value) {
-        switch (attr.getAttrTypeDef().getType()) {
-            case REFERENCE:
-                order.setReferenceId(attr.getId(), Integer.parseInt(value));
-                break;
-            case LIST:
-                order.setListValueId(attr.getId(), Integer.parseInt(value));
-                break;
-            default:
-                order.setStringValue(attr.getId(), value);
-                break;
-        }
     }
 
     private String readText(NcAttribute attr) {

@@ -14,8 +14,8 @@ import com.netcracker.ec.services.util.EntityIdManager;
 
 import java.util.*;
 
-import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
-import static com.netcracker.ec.common.TelecomConstants.NEW_ORDER_OBJECT_TYPE;
+import static com.netcracker.ec.common.OmConstants.NEW_ORDER_OBJECT_TYPE;
+import static com.netcracker.ec.common.OmConstants.TELECOM_OM_SCHEMA_ID;
 
 public class CreateOrderOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -48,13 +48,8 @@ public class CreateOrderOperation implements Operation {
         attributeValueManager.readOrderAttributes(order, attributes);
 
         if (console.getSaveDialogueAnswer()) {
-            //order.save();
-            addOrderParams(order);
+            order.save();
             console.printOrderInfo(order);
         }
-    }
-
-    private void addOrderParams(Order order) {
-        attributeValueManager.mergerOrderAttributes(order);
     }
 }

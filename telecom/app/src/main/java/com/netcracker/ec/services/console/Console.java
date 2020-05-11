@@ -2,18 +2,14 @@ package com.netcracker.ec.services.console;
 
 import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
-import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.model.domain.enums.ConsoleOperation;
-import com.netcracker.ec.provisioning.operations.CreateOrderOperation;
-import com.netcracker.ec.provisioning.operations.ExitOperation;
-import com.netcracker.ec.provisioning.operations.Operation;
-import com.netcracker.ec.provisioning.operations.ShowOrdersOperation;
+import com.netcracker.ec.provisioning.operations.*;
 import com.netcracker.ec.services.util.AttributeValueManager;
 import lombok.Getter;
 
 import java.util.*;
 
-import static com.netcracker.ec.common.TelecomConstants.POSITIVE_ANSWER;
+import static com.netcracker.ec.common.OmConstants.POSITIVE_ANSWER;
 
 public class Console {
     @Getter
@@ -37,6 +33,9 @@ public class Console {
         String operationId = console.nextConsoleOperationCommand();
 
         switch (ConsoleOperation.getOperationById(operationId)) {
+            case DISCONNECT_ORDER:
+                operation = new DisconnectOrderOperation();
+                break;
             case CREATE_ORDER:
                 operation = new CreateOrderOperation();
                 break;

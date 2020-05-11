@@ -1,9 +1,11 @@
 package com.netcracker.ec.services.db.impl;
 
+import com.netcracker.ec.model.db.NcAttribute;
 import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.services.db.DbWorker;
+import com.netcracker.ec.services.db.NcAttributeService;
 import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.Queries;
 import lombok.SneakyThrows;
@@ -12,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObjectService {
     private static final DbWorker DB_WORKER = DbWorker.getInstance();
@@ -69,9 +72,29 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     }
 
     private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
-        return new NcObject(resultSet.getInt(1),
+        NcObject object = new NcObject(resultSet.getInt(1),
                 resultSet.getString(2),
                 new NcObjectTypeServiceImpl().getNcObjectTypeById(resultSet.getInt(3)),
                 resultSet.getString(4));
+        initNcObjectParams(object);
+        return object;
+    }
+
+    private void initNcObjectParams(NcObject object) {
+        new NcAttributeServiceImpl().getAttributesByObjectType(object.getObjectType().getId())
+                .forEach(attr -> object.setParam(attr, getParamValueFromDB(object, attr)));
+    }
+
+    private String getParamValueFromDB(NcObject object, NcAttribute attr) {
+        switch (attr.getAttrTypeDef().getType()) {
+            case REFERENCE:
+                Integer refValue = object.getReferenceId(attr.getId());
+                return refValue != null ? refValue.toString() : null;
+            case LIST:
+                Integer listValue = object.getListValueId(attr.getId());
+                return listValue != null ? listValue.toString() : null;
+            default:
+                return object.getStringValue(attr.getId());
+        }
     }
 }
