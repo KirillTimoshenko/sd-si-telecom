@@ -43,6 +43,19 @@ public class NcObjectTypeServiceImpl implements NcObjectTypeService {
     }
 
     @SneakyThrows
+    @Override
+    public List<NcObjectType> getObjectTypesByPreviousParentId(Integer parentOtId) {
+        String query = Queries.getQuery("get_object_types_by_previous_parent_id");
+        ResultSet resultSet = DB_WORKER.executeSelectQuery(query, parentOtId);
+        List<NcObjectType> objectTypes = new ArrayList<>();
+        while (resultSet.next()) {
+            objectTypes.add(createNcObjectTypeByResultSet(resultSet));
+        }
+        resultSet.close();
+        return objectTypes;
+    }
+
+    @SneakyThrows
     public List<NcObjectType> getObjectTypesByParentIds(Integer... parentOtIds) {
         String query = Queries.getQuery("get_object_types_by_parent_id");
         List<NcObjectType> objectTypes = new ArrayList<>();

@@ -1,7 +1,13 @@
 package com.netcracker.ec.provisioning.operations;
 
+import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
+import com.netcracker.ec.model.domain.enums.OrderAim;
+import com.netcracker.ec.model.domain.order.DisconnectOrder;
+import com.netcracker.ec.model.domain.order.ModifyOrder;
+import com.netcracker.ec.model.domain.order.NewOrder;
+import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
 import com.netcracker.ec.services.db.NcObjectService;
@@ -12,12 +18,7 @@ import com.netcracker.ec.services.db.impl.NcObjectTypeServiceImpl;
 import com.netcracker.ec.services.util.AttributeValueManager;
 import com.netcracker.ec.services.util.EntityIdManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.netcracker.ec.common.OmConstants.*;
+import java.util.*;
 
 public class ShowOrdersOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -38,7 +39,9 @@ public class ShowOrdersOperation implements Operation {
     public void execute() {
         console.printMessage("Please Select Operation.");
 
-        Map<Integer, String> operationModifications = getOperationModificationsMap();
+        Map<Integer, String> operationModifications = getOperationModificationsMap(
+                "Show All Orders",
+                "Show Orders Of A Specific Order Aim");
         console.printAvailableOperations(operationModifications);
 
         Integer operationModification = console.nextAvailableOperation(operationModifications.keySet());
@@ -47,7 +50,7 @@ public class ShowOrdersOperation implements Operation {
                 showAllOrders();
                 break;
             case 2:
-                showOrderOfASpecificObjectType();
+                showOrderOfASpecificOrderAim();
                 break;
             default:
                 break;
@@ -58,9 +61,7 @@ public class ShowOrdersOperation implements Operation {
         List<NcObject> objectsList = new ArrayList<>();
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentIds(NEW_ORDER_OBJECT_TYPE,
-                        MODIFY_ORDER_OBJECT_TYPE,
-                        DISCONNECT_ORDER_OBJECT_TYPE);
+                .getObjectTypesByPreviousParentId(Order.OBJECT_TYPE);
 
         objectTypesList.forEach(objectType -> objectsList.addAll(ncObjectService
                 .getNcObjectsByObjectTypeId(objectType.getId())));
@@ -68,9 +69,50 @@ public class ShowOrdersOperation implements Operation {
         printOrders(objectsList);
     }
 
-    private void showOrderOfASpecificObjectType() {
+    private void showOrderOfASpecificOrderAim() {
+        console.printMessage("Please select Object Type:");
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(NEW_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentId(Order.OBJECT_TYPE);
+        console.printEntityList(objectTypesList);
+
+        Integer orderAim = console.nextAvailableOperation(
+                EntityIdManager.getIdSet(objectTypesList));
+
+        console.printMessage("Please Select Modification:");
+
+        Map<Integer, String> operationModifications = getOperationModificationsMap(
+                "Show All Orders Of Such Order Aim",
+                "Show Orders Of A Specific Object Type");
+        console.printAvailableOperations(operationModifications);
+
+        Integer operationModification = console.nextAvailableOperation(operationModifications.keySet());
+        switch (operationModification) {
+            case 1:
+                showAllOrdersOfASpecificOrderAim(orderAim);
+                break;
+            case 2:
+                showOrderOfASpecificObjectType(orderAim);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void showAllOrdersOfASpecificOrderAim(Integer orderAim) {
+        List<NcObject> objectsList = new ArrayList<>();
+
+        List<NcObjectType> objectTypesList = ncObjectTypeService
+                .getObjectTypesByParentId(orderAim);
+
+        objectTypesList.forEach(objectType -> objectsList.addAll(ncObjectService
+                .getNcObjectsByObjectTypeId(objectType.getId())));
+
+        printOrders(objectsList);
+    }
+
+    private void showOrderOfASpecificObjectType(Integer orderAim) {
+        List<NcObjectType> objectTypesList = ncObjectTypeService
+                .getObjectTypesByParentId(orderAim);
         console.printEntityList(objectTypesList);
 
         Integer objectTypeId = console.nextAvailableOperation(
@@ -85,10 +127,12 @@ public class ShowOrdersOperation implements Operation {
         objects.forEach(console::printOrderInfo);
     }
 
-    private Map<Integer, String> getOperationModificationsMap() {
+    private Map<Integer, String> getOperationModificationsMap(String... modifications) {
         Map<Integer, String> operationModifications = new HashMap<>();
-        operationModifications.put(1, "Show All Orders");
-        operationModifications.put(2, "Show Orders Of A Specific Object Type");
+        int modificationNumber = 1;
+        for (String modification: modifications) {
+            operationModifications.put(modificationNumber++, modification);
+        }
         return operationModifications;
     }
 }

@@ -14,8 +14,7 @@ import com.netcracker.ec.services.util.EntityIdManager;
 
 import java.util.*;
 
-import static com.netcracker.ec.common.OmConstants.NEW_ORDER_OBJECT_TYPE;
-import static com.netcracker.ec.common.OmConstants.TELECOM_OM_SCHEMA_ID;
+import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 
 public class CreateOrderOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -35,7 +34,7 @@ public class CreateOrderOperation implements Operation {
         console.printMessage("Please Select Object Type.");
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(NEW_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentId(NewOrder.OBJECT_TYPE);
         console.printEntityList(objectTypesList);
 
         Integer objectTypeId = console.nextAvailableOperation(EntityIdManager.getIdSet(objectTypesList));

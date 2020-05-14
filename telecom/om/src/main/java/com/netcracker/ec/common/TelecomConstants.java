@@ -1,6 +1,7 @@
 package com.netcracker.ec.common;
 
-public final class TelecomConstants {
-    private TelecomConstants() {
-    }
+public interface TelecomConstants {
+    String POSITIVE_ANSWER = "Y";
+
+    Integer TELECOM_OM_SCHEMA_ID = 502;
 }

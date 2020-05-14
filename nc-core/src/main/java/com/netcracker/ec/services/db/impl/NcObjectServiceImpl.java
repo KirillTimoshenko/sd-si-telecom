@@ -5,7 +5,6 @@ import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.services.db.DbWorker;
-import com.netcracker.ec.services.db.NcAttributeService;
 import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.Queries;
 import lombok.SneakyThrows;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObjectService {
     private static final DbWorker DB_WORKER = DbWorker.getInstance();
@@ -27,6 +25,12 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     public NcObject getNcObjectById(Integer objectId) {
         String query = Queries.getQuery("get_object_by_id");
         return getNcObjectByResultSet(DB_WORKER.executeSelectQuery(query, objectId));
+    }
+
+    @Override
+    public String getNcObjectNameById(Integer objectId) {
+        String query = Queries.getQuery("get_object_name_by_id");
+        return DB_WORKER.getStringValueByQuery(query, objectId);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
 
     @Override
     public List<NcEntity> getNcObjectsAsEntitiesByObjectType(NcObjectType objectType) {
-        String query = Queries.getQuery("get_objects_as_entities_by_ot");
+        String query = Queries.getQuery("get_objects_by_ot");
         return getNcEntitiesByResultSet(DB_WORKER.executeSelectQuery(query, objectType.getId()));
     }
 
@@ -72,15 +76,16 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     }
 
     private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
-        NcObject object = new NcObject(resultSet.getInt(1),
+        NcObject object = new NcObject(
+                resultSet.getInt(1),
                 resultSet.getString(2),
                 new NcObjectTypeServiceImpl().getNcObjectTypeById(resultSet.getInt(3)),
                 resultSet.getString(4));
-        initNcObjectParams(object);
+        getParamsValuesFromDB(object);
         return object;
     }
 
-    private void initNcObjectParams(NcObject object) {
+    private void getParamsValuesFromDB(NcObject object) {
         new NcAttributeServiceImpl().getAttributesByObjectType(object.getObjectType().getId())
                 .forEach(attr -> object.setParam(attr, getParamValueFromDB(object, attr)));
     }

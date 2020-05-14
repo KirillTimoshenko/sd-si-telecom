@@ -5,6 +5,8 @@ import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
 import com.netcracker.ec.model.domain.enums.OrderStatus;
 import com.netcracker.ec.model.domain.order.DisconnectOrder;
+import com.netcracker.ec.model.domain.order.ModifyOrder;
+import com.netcracker.ec.model.domain.order.NewOrder;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
@@ -23,9 +25,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.netcracker.ec.common.OmConstants.ATTR_ORDER_STATUS;
-import static com.netcracker.ec.common.OmConstants.MODIFY_ORDER_OBJECT_TYPE;
-import static com.netcracker.ec.common.OmConstants.NEW_ORDER_OBJECT_TYPE;
-import static com.netcracker.ec.common.OmConstants.TELECOM_OM_SCHEMA_ID;
+
+import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 
 public class DisconnectOrderOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -72,7 +73,7 @@ public class DisconnectOrderOperation implements Operation {
         List<NcObject> objects = new ArrayList<>();
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentIds(NEW_ORDER_OBJECT_TYPE, MODIFY_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentIds(NewOrder.OBJECT_TYPE, ModifyOrder.OBJECT_TYPE);
 
         objectTypesList.forEach(objectType -> objects.addAll(ncObjectService
                 .getNcObjectsByObjectTypeId(objectType.getId())));

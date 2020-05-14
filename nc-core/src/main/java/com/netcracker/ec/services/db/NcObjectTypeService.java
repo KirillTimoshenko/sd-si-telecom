@@ -9,5 +9,7 @@ public interface NcObjectTypeService {
 
     List<NcObjectType> getObjectTypesByParentId(Integer parentOtId);
 
+    List<NcObjectType> getObjectTypesByPreviousParentId(Integer parentOtId);
+
     List<NcObjectType> getObjectTypesByParentIds(Integer... parentOtIds);
 }
