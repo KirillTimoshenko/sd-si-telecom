@@ -48,7 +48,7 @@ public class CreateOrderOperation implements Operation {
 
         if (console.getSaveDialogueAnswer()) {
             order.save();
-            console.printOrderInfo(order);
+            console.printOrderInfo(order, false);
         }
     }
 }

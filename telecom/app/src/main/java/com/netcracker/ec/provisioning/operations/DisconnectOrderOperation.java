@@ -65,7 +65,7 @@ public class DisconnectOrderOperation implements Operation {
 
         if (console.getSaveDialogueAnswer()) {
             disconnectOrder.save();
-            console.printOrderInfo(disconnectOrder);
+            console.printOrderInfo(disconnectOrder, true);
         }
     }
 

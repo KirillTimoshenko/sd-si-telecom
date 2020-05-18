@@ -1,16 +1,20 @@
 package com.netcracker.ec.services.console;
 
+import com.netcracker.ec.model.db.NcAttribute;
 import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.domain.enums.ConsoleOperation;
 import com.netcracker.ec.model.domain.enums.OrderAim;
 import com.netcracker.ec.provisioning.operations.*;
+import com.netcracker.ec.services.db.NcAttributeService;
+import com.netcracker.ec.services.db.impl.NcAttributeServiceImpl;
 import com.netcracker.ec.services.util.AttributeValueManager;
 import lombok.Getter;
 
 import java.util.*;
 
 import static com.netcracker.ec.common.TelecomConstants.POSITIVE_ANSWER;
+import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
 
 public class Console {
     @Getter
@@ -65,13 +69,21 @@ public class Console {
         entityList.forEach(entity -> System.out.println(entity.toFormattedOutput()));
     }
 
-    public void printOrderInfo(NcObject object) {
+    public void printOrderInfo(NcObject object, boolean systemAttrsAllowed) {
         AttributeValueManager attributeValueManager = new AttributeValueManager(scanner);
         StringBuilder stringBuilder = new StringBuilder();
+        Set<NcAttribute> attributes;
         stringBuilder.append("Order name: ")
                 .append(object.getName())
                 .append("\n");
-        object.getParams().forEach((attr, value) ->
+        if (systemAttrsAllowed) {
+            attributes = new NcAttributeServiceImpl()
+                    .getAttributesByObjectType(object.getObjectType().getId());
+        } else {
+            attributes = new NcAttributeServiceImpl()
+                    .getAttributesByObjectTypeAndAttrSchema(object.getObjectType().getId(), TELECOM_OM_SCHEMA_ID);
+        }
+        attributes.forEach(attr ->
                 stringBuilder.append("  ")
                         .append(attr.getName())
                         .append(": ")

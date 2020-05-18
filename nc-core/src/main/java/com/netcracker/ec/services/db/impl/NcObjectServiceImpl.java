@@ -76,30 +76,10 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     }
 
     private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
-        NcObject object = new NcObject(
+        return new NcObject(
                 resultSet.getInt(1),
                 resultSet.getString(2),
                 new NcObjectTypeServiceImpl().getNcObjectTypeById(resultSet.getInt(3)),
                 resultSet.getString(4));
-        getParamsValuesFromDB(object);
-        return object;
-    }
-
-    private void getParamsValuesFromDB(NcObject object) {
-        new NcAttributeServiceImpl().getAttributesByObjectType(object.getObjectType().getId())
-                .forEach(attr -> object.setParam(attr, getParamValueFromDB(object, attr)));
-    }
-
-    private String getParamValueFromDB(NcObject object, NcAttribute attr) {
-        switch (attr.getAttrTypeDef().getType()) {
-            case REFERENCE:
-                Integer refValue = object.getReferenceId(attr.getId());
-                return refValue != null ? refValue.toString() : null;
-            case LIST:
-                Integer listValue = object.getListValueId(attr.getId());
-                return listValue != null ? listValue.toString() : null;
-            default:
-                return object.getStringValue(attr.getId());
-        }
     }
 }

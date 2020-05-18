@@ -124,7 +124,7 @@ public class ShowOrdersOperation implements Operation {
     }
 
     private void printOrders(List<NcObject> objects) {
-        objects.forEach(console::printOrderInfo);
+        objects.forEach(object -> console.printOrderInfo(object, true));
     }
 
     private Map<Integer, String> getOperationModificationsMap(String... modifications) {
