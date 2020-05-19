@@ -1,21 +1,13 @@
 package com.netcracker.ec.provisioning.operations;
 
-import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
-import com.netcracker.ec.model.domain.enums.OrderAim;
-import com.netcracker.ec.model.domain.order.DisconnectOrder;
-import com.netcracker.ec.model.domain.order.ModifyOrder;
-import com.netcracker.ec.model.domain.order.NewOrder;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
-import com.netcracker.ec.services.db.NcAttributeService;
 import com.netcracker.ec.services.db.NcObjectService;
 import com.netcracker.ec.services.db.NcObjectTypeService;
-import com.netcracker.ec.services.db.impl.NcAttributeServiceImpl;
 import com.netcracker.ec.services.db.impl.NcObjectServiceImpl;
 import com.netcracker.ec.services.db.impl.NcObjectTypeServiceImpl;
-import com.netcracker.ec.services.util.AttributeValueManager;
 import com.netcracker.ec.services.util.EntityIdManager;
 
 import java.util.*;
@@ -23,16 +15,12 @@ import java.util.*;
 public class ShowOrdersOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
     private final NcObjectService ncObjectService;
-    private final NcAttributeService ncAttributeService;
-    private final AttributeValueManager attributeValueManager;
 
     private final Console console = Console.getInstance();
 
     public ShowOrdersOperation() {
         this.ncObjectTypeService = new NcObjectTypeServiceImpl();
         this.ncObjectService = new NcObjectServiceImpl();
-        this.ncAttributeService = new NcAttributeServiceImpl();
-        this.attributeValueManager = new AttributeValueManager(console.getScanner());
     }
 
     @Override

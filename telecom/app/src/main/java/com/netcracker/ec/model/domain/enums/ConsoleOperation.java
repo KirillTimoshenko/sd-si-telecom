@@ -10,8 +10,7 @@ import java.util.Arrays;
 public enum ConsoleOperation {
     EXIT("0", "Exit"),
     SHOW_ORDERS("1", "Show orders"),
-    CREATE_ORDER("2", "Create order"),
-    DISCONNECT_ORDER("3", "Disconnect order");
+    CREATE_ORDER("2", "Create order");
 
     private String id;
     private String name;

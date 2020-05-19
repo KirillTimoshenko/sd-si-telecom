@@ -38,9 +38,6 @@ public class Console {
         String operationId = console.nextConsoleOperationCommand();
 
         switch (ConsoleOperation.getOperationById(operationId)) {
-            case DISCONNECT_ORDER:
-                operation = new DisconnectOrderOperation();
-                break;
             case CREATE_ORDER:
                 operation = new CreateOrderOperation();
                 break;
