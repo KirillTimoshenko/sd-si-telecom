@@ -1,5 +1,6 @@
 package com.netcracker.ec.services.db.impl;
 
+import com.netcracker.ec.model.db.NcAttribute;
 import com.netcracker.ec.model.db.NcEntity;
 import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.db.NcObjectType;
@@ -10,6 +11,7 @@ import lombok.SneakyThrows;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObjectService {
@@ -26,9 +28,21 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
     }
 
     @Override
+    public String getNcObjectNameById(Integer objectId) {
+        String query = Queries.getQuery("get_object_name_by_id");
+        return DB_WORKER.getStringValueByQuery(query, objectId);
+    }
+
+    @Override
     public List<Integer> getObjectIdsByByObjectTypeId(Integer otId) {
         String query = Queries.getQuery("get_object_ids_by_parent_ot_desc");
         return DB_WORKER.getIdsByQuery(query, otId);
+    }
+
+    @Override
+    public List<NcObject> getNcObjectsByObjectTypeId(Integer objectTypeId) {
+        String query = Queries.getQuery("get_objects_by_ot");
+        return getNcObjectsByResultSet(DB_WORKER.executeSelectQuery(query, objectTypeId));
     }
 
     @Override
@@ -51,8 +65,19 @@ public class NcObjectServiceImpl extends NcEntityServiceImpl implements NcObject
         return object;
     }
 
+    @SneakyThrows
+    private List<NcObject> getNcObjectsByResultSet(ResultSet resultSet) {
+        List<NcObject> objectsList = new ArrayList<>();
+        while (resultSet.next()) {
+            objectsList.add(createNcObjectByResultSet(resultSet));
+        }
+        resultSet.close();
+        return  objectsList;
+    }
+
     private NcObject createNcObjectByResultSet(ResultSet resultSet) throws SQLException {
-        return new NcObject(resultSet.getInt(1),
+        return new NcObject(
+                resultSet.getInt(1),
                 resultSet.getString(2),
                 new NcObjectTypeServiceImpl().getNcObjectTypeById(resultSet.getInt(3)),
                 resultSet.getString(4));

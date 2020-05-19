@@ -18,7 +18,7 @@ public class ListValueAttributeService {
     }
 
     public String read(NcAttribute attr) {
-        console.printMessage("Please, choose list value.");
+        console.printMessage("Please, choose " + attr.getName().toLowerCase() + " id.");
 
         List<NcEntity> listValues = ncListValueService.getNcListValuesAsEntitiesByNcAttrTypeDefId(
                 attr.getAttrTypeDef().getId());

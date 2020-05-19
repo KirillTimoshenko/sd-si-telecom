@@ -2,6 +2,7 @@ package com.netcracker.ec.provisioning.operations;
 
 import com.netcracker.ec.model.db.NcAttribute;
 import com.netcracker.ec.model.db.NcObjectType;
+import com.netcracker.ec.model.domain.order.NewOrder;
 import com.netcracker.ec.model.domain.order.Order;
 import com.netcracker.ec.services.console.Console;
 import com.netcracker.ec.services.db.NcAttributeService;
@@ -14,7 +15,6 @@ import com.netcracker.ec.services.util.EntityIdManager;
 import java.util.*;
 
 import static com.netcracker.ec.common.TelecomConstants.TELECOM_OM_SCHEMA_ID;
-import static com.netcracker.ec.common.TelecomConstants.ABSTRACT_ORDER_OBJECT_TYPE;
 
 public class CreateOrderOperation implements Operation {
     private final NcObjectTypeService ncObjectTypeService;
@@ -34,7 +34,7 @@ public class CreateOrderOperation implements Operation {
         console.printMessage("Please Select Object Type.");
 
         List<NcObjectType> objectTypesList = ncObjectTypeService
-                .getObjectTypesByParentId(ABSTRACT_ORDER_OBJECT_TYPE);
+                .getObjectTypesByParentId(NewOrder.OBJECT_TYPE);
         console.printEntityList(objectTypesList);
 
         Integer objectTypeId = console.nextAvailableOperation(EntityIdManager.getIdSet(objectTypesList));
@@ -42,17 +42,13 @@ public class CreateOrderOperation implements Operation {
         Set<NcAttribute> attributes = ncAttributeService
                 .getAttributesByObjectTypeAndAttrSchema(objectTypeId, TELECOM_OM_SCHEMA_ID);
 
-        Order order = new Order(ncObjectTypeService.getNcObjectTypeById(objectTypeId));
+        Order order = new NewOrder(ncObjectTypeService.getNcObjectTypeById(objectTypeId));
 
         attributeValueManager.readOrderAttributes(order, attributes);
 
         if (console.getSaveDialogueAnswer()) {
-            addOrderParams(order);
-            console.printOrderInfo(order);
+            order.save();
+            console.printOrderInfo(order, false);
         }
-    }
-
-    private void addOrderParams(Order order) {
-        attributeValueManager.mergerOrderAttributes(order);
     }
 }

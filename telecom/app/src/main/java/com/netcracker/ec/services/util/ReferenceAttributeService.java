@@ -18,7 +18,7 @@ public class ReferenceAttributeService {
     }
 
     public String read(NcAttribute attr) {
-        console.printMessage("Please, enter reference.");
+        console.printMessage("Please, enter reference object id.");
 
         List<NcEntity> objectsList = ncObjectService.getNcObjectsAsEntitiesByObjectType(
                 attr.getAttrTypeDef().getObjectType());

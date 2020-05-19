@@ -1,6 +1,7 @@
 package com.netcracker.ec.services.util;
 
 import com.netcracker.ec.model.db.NcAttribute;
+import com.netcracker.ec.model.db.NcObject;
 import com.netcracker.ec.model.domain.order.Order;
 
 import java.util.Scanner;
@@ -19,18 +20,14 @@ public class AttributeValueManager {
                 .setParam(attr, readAttribute(attr)));
     }
 
-    public void mergerOrderAttributes(Order order) {
-        order.getParams().forEach((key, value) -> mergerAttribute(order, key, value));
-    }
-
-    public String getAttributeValueFromOrder(Order order, NcAttribute attr) {
+    public String getAttributeValueFromOrder(NcObject object, NcAttribute attr) {
         switch (attr.getAttrTypeDef().getType()) {
             case REFERENCE:
-                return order.getReferenceValue(attr.getId());
+                return object.getReferenceValue(attr.getId());
             case LIST:
-                return order.getListValue(attr.getId());
+                return object.getListValue(attr.getId());
             default:
-                return order.getStringValue(attr.getId());
+                return object.getStringValue(attr.getId());
         }
     }
 
@@ -52,20 +49,6 @@ public class AttributeValueManager {
                 break;
         }
         return null;
-    }
-
-    private void mergerAttribute(Order order, NcAttribute attr, String value) {
-        switch (attr.getAttrTypeDef().getType()) {
-            case REFERENCE:
-                order.setReferenceId(attr.getId(), Integer.parseInt(value));
-                break;
-            case LIST:
-                order.setListValueId(attr.getId(), Integer.parseInt(value));
-                break;
-            default:
-                order.setStringValue(attr.getId(), value);
-                break;
-        }
     }
 
     private String readText(NcAttribute attr) {

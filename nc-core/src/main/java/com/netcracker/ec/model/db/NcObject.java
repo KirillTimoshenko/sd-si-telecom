@@ -71,7 +71,7 @@ public class NcObject extends NcEntity {
     }
 
     public String getReferenceValue(Integer attrId) {
-        return new NcObjectServiceImpl().getNcObjectById(getReferenceId(attrId)).getName();
+        return new NcObjectServiceImpl().getNcObjectNameById(getReferenceId(attrId));
     }
 
     public String getListValue(Integer attrId) {

@@ -8,4 +8,8 @@ public interface NcObjectTypeService {
     NcObjectType getNcObjectTypeById(Integer id);
 
     List<NcObjectType> getObjectTypesByParentId(Integer parentOtId);
+
+    List<NcObjectType> getObjectTypesByPreviousParentId(Integer parentOtId);
+
+    List<NcObjectType> getObjectTypesByParentIds(Integer... parentOtIds);
 }
